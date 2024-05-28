@@ -31,6 +31,17 @@ export const addNewProduct = async (req, res, next) => {
 
 export const getAllProducts = async (req, res, next) => {
   // Implement the functionality for search, filter and pagination this function.
+  const pageSize = 10;
+  try {
+    let products = await getAllProductsRepo(req.query, pageSize);
+    if (!products.length > 0) {
+      return next(new ErrorHandler(400, "Products not available"));
+    }
+    res.status(201).json({ success: true, products });
+  } catch (error) {
+    console.log(error);
+    return next(new ErrorHandler(400, error));
+  }
 };
 
 export const updateProduct = async (req, res, next) => {
@@ -152,6 +163,14 @@ export const deleteReview = async (req, res, next) => {
     }
 
     const reviewToBeDeleted = reviews[isReviewExistIndex];
+    if (req.user._id.toString() !== reviewToBeDeleted.user.toString()) {
+      return next(
+        new ErrorHandler(
+          400,
+          "please login as respective user to delete the review"
+        )
+      );
+    }
     reviews.splice(isReviewExistIndex, 1);
 
     await product.save({ validateBeforeSave: false });

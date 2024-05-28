@@ -69,9 +69,9 @@ export const sendPasswordResetEmail = async (user, resetPasswordURL) => {
                 </div>
                 <div class="content">
                     <p>Hello, ${user.name}</p>
-                    <p>You have requested to reset your password for your Storefleet account. To reset your password, please click the button below:</p>
+                    <p>Enter this token to complete the reset: <b>${resetPasswordURL}</b></p>
                     <p><a class="button" href="${resetPasswordURL}">Reset Password</a></p>
-                    <p>If you did not request a password reset, please ignore this email.</p>
+                    <p>Use this token in reset parameter route. If you did not request a password reset, please ignore this email.</p>
                 </div>
             </div>
         </body>

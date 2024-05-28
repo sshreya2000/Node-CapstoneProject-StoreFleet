@@ -1,6 +1,7 @@
 import UserModel from "./user.schema.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongoose";
+import { ErrorHandler } from "../../../utils/errorHandler.js";
 
 export const createNewUserRepo = async (user) => {
   return await new UserModel(user).save();
@@ -36,4 +37,11 @@ export const deleteUserRepo = async (_id) => {
 
 export const updateUserRoleAndProfileRepo = async (_id, data) => {
   // Write your code here for updating the roles of other users by admin
+
+  const user = await UserModel.findById(_id);
+  if (!user) throw new ErrorHandler(400, "user not found!");
+  if (data.name) user.name = data.name;
+  if (data.email) user.email = data.email;
+  if (data.role) user.role = data.role;
+  return await user.save();
 };
